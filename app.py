@@ -1,9 +1,10 @@
 import os
-from flask import Flask, request, render_template, redirect, url_for
+from flask import Flask, request, render_template, redirect
 
 app = Flask(__name__)
 
-UPLOAD_FOLDER = 'pasta_para_salvar'
+# Define o caminho da pasta para armazenar as imagens
+UPLOAD_FOLDER = '/home/wendel-lucas/Imagens/teste'
 if not os.path.exists(UPLOAD_FOLDER):
     os.makedirs(UPLOAD_FOLDER)
 
@@ -23,19 +24,12 @@ def upload():
     if file.filename == '':
         return 'No selected file', 400
 
-    # Salva a imagem
+    # Salva a imagem no caminho especificado
     file_path = os.path.join(UPLOAD_FOLDER, file.filename)
     file.save(file_path)
 
-    # URL da imagem que você pode enviar via WhatsApp
-    image_url = f"http://192.168.3.19:5000/{UPLOAD_FOLDER}/{file.filename}"
-
-    # Substitua pelo seu número
-    whatsapp_number = "5579999801810"
-    whatsapp_message = f"Nova foto recebida: {image_url}"
-
-    # Redirecionar para o WhatsApp
-    return redirect(f"https://wa.me/{whatsapp_number}?text={whatsapp_message}")
+    # Retornar uma mensagem de sucesso
+    return f'Imagem salva com sucesso em: {file_path}'
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
