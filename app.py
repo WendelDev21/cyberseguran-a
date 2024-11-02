@@ -1,12 +1,12 @@
 import os
-from flask import Flask, request, render_template, redirect
+import requests
+from flask import Flask, request, render_template
 
 app = Flask(__name__)
 
-# Define o caminho da pasta para armazenar as imagens
-UPLOAD_FOLDER = '/home/wendel-lucas/Imagens/teste'
-if not os.path.exists(UPLOAD_FOLDER):
-    os.makedirs(UPLOAD_FOLDER)
+# Configurações do Telegram
+TELEGRAM_BOT_TOKEN = '7203276521:AAFV3BfQkszoQGtY1as_IKy1tVOxYFNikck'
+CHAT_ID = '6540052628'
 
 @app.route('/')
 def index():
@@ -24,12 +24,17 @@ def upload():
     if file.filename == '':
         return 'No selected file', 400
 
-    # Salva a imagem no caminho especificado
-    file_path = os.path.join(UPLOAD_FOLDER, file.filename)
+    # Salvar imagem em uma pasta temporária
+    file_path = f'/tmp/{file.filename}'  # ou qualquer caminho temporário
     file.save(file_path)
 
-    # Retornar uma mensagem de sucesso
-    return f'Imagem salva com sucesso em: {file_path}'
+    # Enviar imagem para o Telegram
+    with open(file_path, 'rb') as photo:
+        requests.post(f'https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendPhoto',
+                      data={'chat_id': CHAT_ID},
+                      files={'photo': photo})
+
+    return 'Imagem enviada para o Telegram com sucesso!'
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
